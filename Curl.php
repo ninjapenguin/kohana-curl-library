@@ -56,7 +56,7 @@ class Curl_Core {
 	/**
 	 * Execute the curl request and return the response
 	 * @return String				Returned output from the requested resource
-	 * @throws Kohana_Exception
+	 * @throws Kohana_User_Exception
 	 */
 	public function exec()
 	{
@@ -64,7 +64,7 @@ class Curl_Core {
 		
 		//Wrap the error reporting in an exception
 		if($ret === false) 
-			throw new Kohana_Exception("Curl Error: " . curl_error($this->resource));
+			throw new Kohana_User_Exception("Curl Error", curl_error($this->resource));
 		else
 			return $ret;
 		
