@@ -86,7 +86,7 @@ class Curl_Core {
 	/**
 	 * Destructor
 	 */
-	protected function __destruct()
+	function __destruct()
 	{
 		curl_close($this->resource);
 	}
