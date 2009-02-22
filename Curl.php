@@ -129,6 +129,7 @@ class Curl_Core {
 		$ch = Curl::factory($curl_options);
 		
 		$ch->set_opt(CURLOPT_URL, $url)
+		->set_opt(CURLOPT_NOBODY, $headers_only)
 		->set_opt(CURLOPT_RETURNTRANSFER, true)
 		->set_opt(CURLOPT_POST, true)
 		->set_opt(CURLOPT_POSTFIELDS, $data);
