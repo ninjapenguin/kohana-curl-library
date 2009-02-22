@@ -26,16 +26,19 @@ class Curl_Core {
 	public function __construct($data = array())
 	{
 		$config = array(
-			'strip_headers' => true
+			CURLOPT_HEADER => false
 		);
 		
 		//Apply any passed configuration
-		$this->config = array_merge($config, $data);
+		$data += $config;
+		$this->config = $data;
 		
 		$this->resource = curl_init();
-		
+				
 		//Apply configuration settings
-		if ($this->config['strip_headers'] == true) $this->set_opt(CURLOPT_HEADER, false);
+		foreach ($this->config as $key => $value) {
+			$this->set_opt($key, $value);
+		}
 		
 	}
 	
@@ -95,10 +98,11 @@ class Curl_Core {
 	 * @param String	url to request
 	 * @param Array		additional headers to send in the request
 	 * @param Bool		flag to return only the headers
+	 * @param Array		Additional curl options to instantiate curl with
 	 */
-	public static function get($url, Array $headers = array(), $headers_only = false)
+	public static function get($url, Array $headers = array(), $headers_only = false, Array $curl_options = array())
 	{
-		$ch = Curl::factory();
+		$ch = Curl::factory($curl_options);
 		
 		$ch->set_opt(CURLOPT_URL, $url)
       	->set_opt(CURLOPT_RETURNTRANSFER, true)
@@ -118,10 +122,11 @@ class Curl_Core {
 	 * @param Array		past data to post to $url
 	 * @param Array		additional headers to send in the request
 	 * @param Bool		flag to return only the headers
+	 * @param Array		Additional curl options to instantiate curl with
 	 */
-	public static function post($url, Array $data = array(), Array $headers = array(), $headers = false)
+	public static function post($url, Array $data = array(), Array $headers = array(), $headers_only = false, Array $curl_options = array())
 	{
-		$ch = Curl::factory();
+		$ch = Curl::factory($curl_options);
 		
 		$ch->set_opt(CURLOPT_URL, $url)
 		->set_opt(CURLOPT_RETURNTRANSFER, true)
@@ -129,7 +134,11 @@ class Curl_Core {
 		->set_opt(CURLOPT_POSTFIELDS, $data);
       
       	//Set any additional headers
-		if(!empty($headers)) $ch->set_opt(CURLOPT_HTTPHEADER, $headers);
+		if(!empty($headers))
+		{
+			echo "Setting Header";
+			$ch->set_opt(CURLOPT_HTTPHEADER, $headers);
+		}
 		
 	    return $ch->exec();
 	}
