@@ -134,11 +134,7 @@ class Curl_Core {
 		->set_opt(CURLOPT_POSTFIELDS, $data);
       
       	//Set any additional headers
-		if(!empty($headers))
-		{
-			echo "Setting Header";
-			$ch->set_opt(CURLOPT_HTTPHEADER, $headers);
-		}
+		if(!empty($headers)) $ch->set_opt(CURLOPT_HTTPHEADER, $headers);
 		
 	    return $ch->exec();
 	}
